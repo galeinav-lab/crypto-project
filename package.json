@@ -6,9 +6,20 @@
   "scripts": {
     "build": "tsc"
   },
-  "dependencies": {},
   "devDependencies": {
     "typescript": "^5.5.3"
   },
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/galeinav-lab/crypto-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/galeinav-lab/crypto-project/issues"
+  },
+  "homepage": "https://github.com/galeinav-lab/crypto-project#readme"
 }
