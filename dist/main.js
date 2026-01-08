@@ -1,12 +1,8 @@
 import { coinManager } from "./coin-manager.js";
-import {Coin} from "./coin.js";
-import {CoinList} from "./coin-list";
-
+import { CoinList } from "./coin-list";
 const coinList = new CoinList();
-
 async function main() {
-    const coins:Coin[] = await coinManager.getCoinList();
+    const coins = await coinManager.getCoinList();
     coinList.setCoins(coins);
 }
-
 main();
