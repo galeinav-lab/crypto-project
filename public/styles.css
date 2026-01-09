@@ -2,23 +2,165 @@
     margin: 0;
 }
 
-#header {
+#title-section {
     display: flex;
-    height: 10vh;
-    background-color: #a2a2a2;
-    width: 100%;
-    border-bottom: 3px solid #565656;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 28px 0 22px 0;
+    text-align: center;
 }
 
-#header h1 {
+#page-title {
+    margin: 0;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.6),
+            0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+#page-subtitle {
+    margin-top: 8px;
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
 }
 
 #actions {
-    margin-top: 20px;
     display: flex;
-    width: 100%;
-    justify-content: space-evenly;
-
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    max-width: 1100px;
+    margin: 18px auto 0 auto;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 14px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#actions .btn.btn-outline-primary {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+#actions .btn.btn-outline-primary:hover {
+    color: #111;
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(255, 255, 255, 0.92);
+}
+
+#actions .search-input,
+#actions input[type="text"] {
+    width: 260px;
+    height: 38px;
+
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+
+    color: #111;
+}
+
+#actions .search-input::placeholder,
+#actions input[type="text"]::placeholder {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+#actions .search-input:focus,
+#actions input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.35);
+}
+
+#coins {
+    max-width: 1100px;
+    margin: 0 0 10px 0;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 14px;
+    box-shadow:
+            0 10px 28px rgba(0, 0, 0, 0.22);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+            0 14px 36px rgba(0, 0, 0, 0.28);
+}
+
+.card .text-muted {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.card .btn {
+    border-radius: 10px;
+}
+
+#coins-parallax {
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+.bg-video {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.bg-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(2px) saturate(1.2) contrast(1.05);
+    transform: scale(1.05);
+}
+
+.bg-video::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.40);
+    z-index: 1;
+}
+
+.page-content {
+    position: relative;
+    z-index: 2;
+}
+
+
+
+
