@@ -5,13 +5,18 @@ import {CoinList} from "./coin-list.js";
 const coinList = new CoinList();
 let openedDetails: HTMLDivElement | null = null;
 
-async function renderCoinList() {
-    const coins:Coin[] = await coinManager.getCoinList();
+async function loadCoins() {
+    const coins: Coin[] = await coinManager.getCoinList();
     coinList.setCoins(coins);
+    renderCoinList();
+}
+
+async function renderCoinList() {
+
+    const coins = coinList.getCoins();
     const container = document.querySelector<HTMLDivElement>("#coins");
 
     if (!container) return;
-
     container.innerHTML = "";
 
     coins.forEach(coin => {
@@ -111,10 +116,30 @@ async function renderCoinList() {
                 details.innerText = "Failed to load info";
             }
         };
-
     })
 }
-renderCoinList();
+
+const searchInput = document.querySelector<HTMLInputElement>("#searchInput");
+const searchBtn = document.querySelector<HTMLButtonElement>("#searchBtn");
+const clearBtn = document.querySelector<HTMLButtonElement>("#clearBtn");
+
+if (searchBtn) {
+    searchBtn.onclick = () => {
+        const term = searchInput?.value || "";
+        coinList.search(term);
+        renderCoinList();
+    };
+}
+
+if (clearBtn) {
+    clearBtn.onclick = () => {
+        if (searchInput) searchInput.value = "";
+        coinList.clearSearch();
+        renderCoinList();
+    };
+}
+
+loadCoins();
 
 
 
