@@ -2,9 +2,13 @@ import { coinManager } from "./coin-manager.js";
 import { CoinList } from "./coin-list.js";
 const coinList = new CoinList();
 let openedDetails = null;
-async function renderCoinList() {
+async function loadCoins() {
     const coins = await coinManager.getCoinList();
     coinList.setCoins(coins);
+    renderCoinList();
+}
+async function renderCoinList() {
+    const coins = coinList.getCoins();
     const container = document.querySelector("#coins");
     if (!container)
         return;
@@ -84,4 +88,22 @@ async function renderCoinList() {
         };
     });
 }
-renderCoinList();
+const searchInput = document.querySelector("#searchInput");
+const searchBtn = document.querySelector("#searchBtn");
+const clearBtn = document.querySelector("#clearBtn");
+if (searchBtn) {
+    searchBtn.onclick = () => {
+        const term = searchInput?.value || "";
+        coinList.search(term);
+        renderCoinList();
+    };
+}
+if (clearBtn) {
+    clearBtn.onclick = () => {
+        if (searchInput)
+            searchInput.value = "";
+        coinList.clearSearch();
+        renderCoinList();
+    };
+}
+loadCoins();
