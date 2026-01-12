@@ -201,5 +201,32 @@
     font-size: 0.95rem;
 }
 
+.title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+}
 
+.title-row .card-title {
+    margin: 0;
+}
+
+.fav-star {
+    font-size: 22px;
+    cursor: pointer;
+    user-select: none;
+    color: rgba(0,0,0,0.30);
+    transition: transform 120ms ease, color 120ms ease;
+}
+
+.fav-star:hover {
+    transform: scale(1.12);
+}
+
+.fav-star.on {
+    color: #f4c542;
+    text-shadow: 0 0 8px rgba(244, 197, 66, 0.55);
+}
 
