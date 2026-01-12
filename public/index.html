@@ -28,7 +28,6 @@
         <div class="nav-buttons">
             <button id="homeBtn" class="btn btn-outline-primary">Home</button>
             <button id="favoritesBtn" class="btn btn-outline-primary">Favorites</button>
-            <button class="btn btn-outline-primary">Live Reports</button>
             <button class="btn btn-outline-primary">About</button>
         </div>
         <div class="search-box">
@@ -42,10 +41,23 @@
 
     <section id="coins-parallax">
         <div id="coins" class="row g-3 align-items-start"></div>
+
+        <div id="chartSection">
+            <div class="chart-header">
+                <button id="backToListBtn" class="btn btn-outline-primary btn-sm">Back</button>
+                <div id="chartTitle" class="chart-title"></div>
+            </div>
+
+            <div id="tvChart"></div>
+        </div>
+
     </section>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script type="module" src="../dist/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@5.0.1/dist/lightweight-charts.standalone.production.js"></script>
+
 
 </body>
 </html>

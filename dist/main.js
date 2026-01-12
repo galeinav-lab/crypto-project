@@ -1,5 +1,6 @@
 import { coinManager } from "./coin-manager.js";
 import { CoinList } from "./coin-list.js";
+import { initChartPage, openSingleCoinChart, showList } from "./chart.js";
 const coinList = new CoinList();
 let openedDetails = null;
 let viewMode = "all";
@@ -65,11 +66,18 @@ async function renderCoinList() {
                 renderCoinList();
             }
         };
+        const chartBtn = document.createElement("button");
+        chartBtn.className = "btn btn-outline-primary btn-sm mt-2";
+        chartBtn.innerText = "Chart";
+        chartBtn.onclick = async () => {
+            await openSingleCoinChart(coin.symbol.toUpperCase());
+        };
         titleRow.appendChild(title);
         titleRow.appendChild(star);
         body.appendChild(titleRow);
         body.appendChild(symbol);
         body.appendChild(btn);
+        body.appendChild(chartBtn);
         card.appendChild(body);
         card.appendChild(details);
         col.appendChild(card);
@@ -144,14 +152,26 @@ const homeBtn = document.querySelector("#homeBtn");
 const favoritesBtn = document.querySelector("#favoritesBtn");
 if (homeBtn) {
     homeBtn.onclick = () => {
+        showList();
         viewMode = "all";
         renderCoinList();
     };
 }
 if (favoritesBtn) {
     favoritesBtn.onclick = () => {
+        showList();
         viewMode = "favorites";
         renderCoinList();
     };
 }
+initChartPage({
+    coinsSectionSelector: "#coins",
+    chartSectionSelector: "#chartSection",
+    chartContainerSelector: "#tvChart",
+    backButtonSelector: "#backToListBtn",
+    titleSelector: "#chartTitle",
+    onBackToList: () => {
+        renderCoinList();
+    },
+});
 loadCoins();
