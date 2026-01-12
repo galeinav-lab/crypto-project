@@ -4,6 +4,7 @@ import {CoinList} from "./coin-list.js";
 
 const coinList = new CoinList();
 let openedDetails: HTMLDivElement | null = null;
+let viewMode = "all";
 
 async function loadCoins() {
     const coins: Coin[] = await coinManager.getCoinList();
@@ -13,10 +14,14 @@ async function loadCoins() {
 
 async function renderCoinList() {
 
-    const coins = coinList.getCoins();
-    const container = document.querySelector<HTMLDivElement>("#coins");
+    let coins = coinList.getCoins();
+
+    if (viewMode === "favorites") {
+        coins = coins.filter(c => coinList.isFavorite(c.id));
+    }   const container = document.querySelector<HTMLDivElement>("#coins");
 
     if (!container) return;
+
     container.innerHTML = "";
 
     coins.forEach(coin => {
@@ -29,9 +34,15 @@ async function renderCoinList() {
         const body = document.createElement("div");
         body.className = "card-body d-flex flex-column";
 
+        const titleRow = document.createElement("div");
+        titleRow.className = "title-row";
+
         const title = document.createElement("h5");
-        title.className = "card-title mb-1";
+        title.className = "card-title mb-0";
         title.innerText = coin.name;
+
+        const star = document.createElement("i");
+        star.className = "bi bi-star fav-star";
 
         const symbol = document.createElement("div");
         symbol.className = "text-muted small mb-3";
@@ -46,7 +57,35 @@ async function renderCoinList() {
         details.className = "coin-details mt-3";
         details.style.display = "none";
 
-        body.appendChild(title);
+        function syncStar() {
+            const isFav = coinList.isFavorite(coin.id);
+            star.classList.toggle("bi-star", !isFav);
+            star.classList.toggle("bi-star-fill", isFav);
+            star.classList.toggle("on", isFav);
+        }
+        syncStar();
+
+        star.onclick = () => {
+            const isFav = coinList.isFavorite(coin.id);
+            if (!isFav) {
+                const ok = coinList.tryAddFavorite(coin.id);
+                if (!ok) {
+                    alert("You can add up to 5 Favorites");
+                    return;
+                }
+            } else {
+                coinList.removeFavorite(coin.id);
+            }
+            syncStar();
+
+            if (viewMode === "favorites") {
+                renderCoinList();
+            }
+        };
+        titleRow.appendChild(title);
+        titleRow.appendChild(star);
+
+        body.appendChild(titleRow);
         body.appendChild(symbol);
         body.appendChild(btn);
 
@@ -139,7 +178,22 @@ if (clearBtn) {
     };
 }
 
+const homeBtn = document.querySelector<HTMLButtonElement>("#homeBtn");
+const favoritesBtn = document.querySelector<HTMLButtonElement>("#favoritesBtn");
+
+if (homeBtn) {
+    homeBtn.onclick = () => {
+        viewMode = "all";
+        renderCoinList();
+    };
+}
+
+if (favoritesBtn) {
+    favoritesBtn.onclick = () => {
+        viewMode = "favorites";
+        renderCoinList();
+    };
+}
+
+
 loadCoins();
-
-
-
