@@ -12,14 +12,16 @@ export class CoinList {
     getCoins() {
         return this.filteredCoins;
     }
+    getFilteredCoins() {
+        return this.filteredCoins;
+    }
     search(term) {
         const value = term.trim().toLowerCase();
         if (!value) {
             this.filteredCoins = this.coins;
             return;
         }
-        this.filteredCoins = this.coins.filter(c => c.name.toLowerCase().includes(value) ||
-            c.symbol.toLowerCase().includes(value));
+        this.filteredCoins = this.coins.filter(c => c.symbol.toLowerCase().includes(value));
     }
     clearSearch() {
         this.filteredCoins = this.coins;

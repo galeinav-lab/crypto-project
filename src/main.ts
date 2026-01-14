@@ -15,7 +15,7 @@ async function loadCoins() {
 
 async function renderCoinList() {
 
-    let coins = coinList.getCoins();
+    let coins = coinList.getFilteredCoins();
 
     if (viewMode === "favorites") {
         coins = coins.filter(c => coinList.isFavorite(c.id));
@@ -183,21 +183,41 @@ if (searchBtn) {
 
 if (clearBtn) {
     clearBtn.onclick = () => {
-        if (searchInput)
+        if (searchInput) {
             searchInput.value = "";
-            coinList.clearSearch();
-            renderCoinList();
+        }
+        coinList.clearSearch();
+        renderCoinList();
     };
+}
+
+if (searchInput) {
+    searchInput.addEventListener("input", () => {
+        const term = searchInput.value || "";
+        coinList.search(term);
+        renderCoinList();
+    });
 }
 
 const homeBtn = document.querySelector<HTMLButtonElement>("#homeBtn");
 const favoritesBtn = document.querySelector<HTMLButtonElement>("#favoritesBtn");
+const aboutBtn = document.querySelector<HTMLButtonElement>("#aboutBtn");
+const aboutSection = document.querySelector<HTMLDivElement>("#aboutSection");
+const coinsSection = document.querySelector<HTMLDivElement>("#coins");
+
+function showPage(page: "coins" | "chart" | "about") {
+    if (coinsSection) coinsSection.style.display = page === "coins" ? "flex" : "none";
+    if (aboutSection) aboutSection.style.display = page === "about" ? "block" : "none";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 if (homeBtn) {
     homeBtn.onclick = () => {
         showList();
         viewMode = "all";
         renderCoinList();
+        showPage("coins");
     };
 }
 
@@ -206,8 +226,16 @@ if (favoritesBtn) {
         showList();
         viewMode = "favorites";
         renderCoinList();
+        showPage("coins");
     };
 }
+
+if (aboutBtn) {
+    aboutBtn.onclick = () => {
+        showPage("about");
+    };
+}
+
 
 initChartPage({
     coinsSectionSelector: "#coins",

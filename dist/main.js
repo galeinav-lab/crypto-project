@@ -10,7 +10,7 @@ async function loadCoins() {
     renderCoinList();
 }
 async function renderCoinList() {
-    let coins = coinList.getCoins();
+    let coins = coinList.getFilteredCoins();
     if (viewMode === "favorites") {
         coins = coins.filter(c => coinList.isFavorite(c.id));
     }
@@ -142,19 +142,38 @@ if (searchBtn) {
 }
 if (clearBtn) {
     clearBtn.onclick = () => {
-        if (searchInput)
+        if (searchInput) {
             searchInput.value = "";
+        }
         coinList.clearSearch();
         renderCoinList();
     };
 }
+if (searchInput) {
+    searchInput.addEventListener("input", () => {
+        const term = searchInput.value || "";
+        coinList.search(term);
+        renderCoinList();
+    });
+}
 const homeBtn = document.querySelector("#homeBtn");
 const favoritesBtn = document.querySelector("#favoritesBtn");
+const aboutBtn = document.querySelector("#aboutBtn");
+const aboutSection = document.querySelector("#aboutSection");
+const coinsSection = document.querySelector("#coins");
+function showPage(page) {
+    if (coinsSection)
+        coinsSection.style.display = page === "coins" ? "flex" : "none";
+    if (aboutSection)
+        aboutSection.style.display = page === "about" ? "block" : "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 if (homeBtn) {
     homeBtn.onclick = () => {
         showList();
         viewMode = "all";
         renderCoinList();
+        showPage("coins");
     };
 }
 if (favoritesBtn) {
@@ -162,6 +181,12 @@ if (favoritesBtn) {
         showList();
         viewMode = "favorites";
         renderCoinList();
+        showPage("coins");
+    };
+}
+if (aboutBtn) {
+    aboutBtn.onclick = () => {
+        showPage("about");
     };
 }
 initChartPage({
