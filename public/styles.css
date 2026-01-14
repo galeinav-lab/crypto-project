@@ -345,3 +345,16 @@
 .about-value {
     font-weight: 700;
 }
+
+@media (max-width: 576px) {
+   #actions {
+       display: flex;
+       flex-direction: column;
+       width: 90%;
+   }
+    .search-box {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+    }
+}
