@@ -49,8 +49,7 @@ export async function openSingleCoinChart(symbol) {
     tvChartEl.innerHTML = "";
     const LW = window.LightweightCharts;
     if (!LW) {
-        console.error("LightweightCharts is not loaded. Check index.html script tag.");
-        return;
+        throw new Error("LightweightCharts is not loaded. Check index.html script tag.");
     }
     chart = LW.createChart(tvChartEl, {
         height: 420,
@@ -74,8 +73,8 @@ export async function openSingleCoinChart(symbol) {
 }
 async function fetchMinuteHistory(symbol, limit) {
     const url = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${symbol}&tsym=USD&limit=${limit}`;
-    const res = await fetch(url);
-    const json = await res.json();
+    const response = await fetch(url);
+    const json = await response.json();
     const data = json?.Data?.Data || [];
     return data.map((c) => ({
         time: c.time,

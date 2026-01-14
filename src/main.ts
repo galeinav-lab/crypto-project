@@ -71,7 +71,7 @@ async function renderCoinList() {
             if (!isFav) {
                 const ok = coinList.tryAddFavorite(coin.id);
                 if (!ok) {
-                    alert("You can add up to 5 Favorites");
+                    openFavoritesLimitModal(coin.id);
                     return;
                 }
             } else {
@@ -183,9 +183,10 @@ if (searchBtn) {
 
 if (clearBtn) {
     clearBtn.onclick = () => {
-        if (searchInput) searchInput.value = "";
-        coinList.clearSearch();
-        renderCoinList();
+        if (searchInput)
+            searchInput.value = "";
+            coinList.clearSearch();
+            renderCoinList();
     };
 }
 
@@ -218,4 +219,63 @@ initChartPage({
         renderCoinList();
     },
 });
+
+let pendingFavoriteId: string | null = null;
+
+function openFavoritesLimitModal(requestedCoinId: string) {
+    pendingFavoriteId = requestedCoinId;
+
+    const list = document.querySelector<HTMLDivElement>("#favoritesModalList");
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    const favCoins = coinList.getCoins().filter(c => coinList.isFavorite(c.id));
+
+    favCoins.forEach(c => {
+        const item = document.createElement("div");
+        item.className = "list-group-item";
+
+        const left = document.createElement("div");
+        left.innerHTML = `<strong>${c.symbol.toUpperCase()}</strong> <div class="text-muted">(${c.name})</div>`;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "btn btn-outline-danger btn-sm";
+        removeBtn.innerText = "Remove";
+
+        removeBtn.onclick = () => {
+            coinList.removeFavorite(c.id);
+
+            renderCoinList();
+
+            if (pendingFavoriteId) {
+                const ok = coinList.tryAddFavorite(pendingFavoriteId);
+                if (ok) {
+                    pendingFavoriteId = null;
+                    renderCoinList();
+
+                    const modalEl = document.getElementById("favoritesLimitModal");
+                    const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
+                    modal?.hide();
+                    (document.activeElement as HTMLElement | null)?.blur();
+                }
+                else {
+                    openFavoritesLimitModal(pendingFavoriteId);
+                }
+            }
+            else {
+                openFavoritesLimitModal(requestedCoinId);
+            }
+        };
+
+        item.appendChild(left);
+        item.appendChild(removeBtn);
+        list.appendChild(item);
+    });
+
+    const modalEl = document.getElementById("favoritesLimitModal");
+    const modal = new (window as any).bootstrap.Modal(modalEl);
+    modal.show();
+}
+
 loadCoins();

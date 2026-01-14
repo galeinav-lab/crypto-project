@@ -54,7 +54,7 @@ async function renderCoinList() {
             if (!isFav) {
                 const ok = coinList.tryAddFavorite(coin.id);
                 if (!ok) {
-                    alert("You can add up to 5 Favorites");
+                    openFavoritesLimitModal(coin.id);
                     return;
                 }
             }
@@ -174,4 +174,49 @@ initChartPage({
         renderCoinList();
     },
 });
+let pendingFavoriteId = null;
+function openFavoritesLimitModal(requestedCoinId) {
+    pendingFavoriteId = requestedCoinId;
+    const list = document.querySelector("#favoritesModalList");
+    if (!list)
+        return;
+    list.innerHTML = "";
+    const favCoins = coinList.getCoins().filter(c => coinList.isFavorite(c.id));
+    favCoins.forEach(c => {
+        const item = document.createElement("div");
+        item.className = "list-group-item";
+        const left = document.createElement("div");
+        left.innerHTML = `<strong>${c.symbol.toUpperCase()}</strong> <div class="text-muted">(${c.name})</div>`;
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "btn btn-outline-danger btn-sm";
+        removeBtn.innerText = "Remove";
+        removeBtn.onclick = () => {
+            coinList.removeFavorite(c.id);
+            renderCoinList();
+            if (pendingFavoriteId) {
+                const ok = coinList.tryAddFavorite(pendingFavoriteId);
+                if (ok) {
+                    pendingFavoriteId = null;
+                    renderCoinList();
+                    const modalEl = document.getElementById("favoritesLimitModal");
+                    const modal = window.bootstrap.Modal.getInstance(modalEl);
+                    modal?.hide();
+                    document.activeElement?.blur();
+                }
+                else {
+                    openFavoritesLimitModal(pendingFavoriteId);
+                }
+            }
+            else {
+                openFavoritesLimitModal(requestedCoinId);
+            }
+        };
+        item.appendChild(left);
+        item.appendChild(removeBtn);
+        list.appendChild(item);
+    });
+    const modalEl = document.getElementById("favoritesLimitModal");
+    const modal = new window.bootstrap.Modal(modalEl);
+    modal.show();
+}
 loadCoins();
