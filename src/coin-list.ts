@@ -16,6 +16,10 @@ export class CoinList {
         return this.filteredCoins;
     }
 
+    getFilteredCoins(): Coin[] {
+        return this.filteredCoins;
+    }
+
     search(term: string) {
         const value = term.trim().toLowerCase();
 
@@ -25,7 +29,6 @@ export class CoinList {
         }
 
         this.filteredCoins = this.coins.filter(c =>
-            c.name.toLowerCase().includes(value) ||
             c.symbol.toLowerCase().includes(value)
         );
     }

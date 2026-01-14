@@ -297,3 +297,51 @@
     justify-content: space-between;
     gap: 12px;
 }
+
+#aboutSection{
+    max-width: 1100px;
+    margin: 0 auto 10px auto;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fff;
+}
+
+.about-card {
+    padding: 10px;
+}
+
+.about-title {
+    margin: 0 0 10px 0;
+    font-weight: 800;
+}
+
+.about-text {
+    margin: 0 0 16px 0;
+    opacity: 0.9;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.about-item {
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.18);
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.about-label {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.about-value {
+    font-weight: 700;
+}
