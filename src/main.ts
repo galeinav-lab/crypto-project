@@ -8,9 +8,15 @@ let openedDetails: HTMLDivElement | null = null;
 let viewMode = "all";
 
 async function loadCoins() {
-    const coins: Coin[] = await coinManager.getCoinList();
-    coinList.setCoins(coins);
-    renderCoinList();
+    try {
+        const coins: Coin[] = await coinManager.getCoinList();
+        coinList.setCoins(coins);
+        renderCoinList();
+    }
+    catch (err) {
+        alert("Too many requests try again later.");
+        console.error(err);
+    }
 }
 
 async function renderCoinList() {
@@ -19,7 +25,8 @@ async function renderCoinList() {
 
     if (viewMode === "favorites") {
         coins = coins.filter(c => coinList.isFavorite(c.id));
-    }   const container = document.querySelector<HTMLDivElement>("#coins");
+    }
+    const container = document.querySelector<HTMLDivElement>("#coins");
 
     if (!container) return;
 
@@ -48,6 +55,10 @@ async function renderCoinList() {
         const symbol = document.createElement("div");
         symbol.className = "text-muted small mb-3";
         symbol.innerText = coin.symbol.toUpperCase();
+
+        const chartBtn = document.createElement("button");
+        chartBtn.className = "btn btn-outline-primary btn-sm mt-2";
+        chartBtn.innerText = "Chart";
 
         const btn = document.createElement("button");
         btn.className = "btn btn-outline-primary btn-sm mt-auto more-info-btn";
@@ -84,10 +95,6 @@ async function renderCoinList() {
             }
         };
 
-        const chartBtn = document.createElement("button");
-        chartBtn.className = "btn btn-outline-primary btn-sm mt-2";
-        chartBtn.innerText = "Chart";
-
         chartBtn.onclick = async () => {
             await openSingleCoinChart(coin.symbol.toUpperCase());
         };
@@ -97,8 +104,8 @@ async function renderCoinList() {
 
         body.appendChild(titleRow);
         body.appendChild(symbol);
-        body.appendChild(btn);
         body.appendChild(chartBtn);
+        body.appendChild(btn);
 
         card.appendChild(body);
         card.appendChild(details);
@@ -161,9 +168,10 @@ async function renderCoinList() {
                 box.appendChild(row);
                 details.appendChild(box);
 
-            } catch (e) {
+            }
+            catch (err) {
                 details.innerHTML = "";
-                details.innerText = "Failed to load info";
+                details.innerText = "Too many requests try again later.";
             }
         };
     })

@@ -17,19 +17,19 @@ class CoinManager {
             }
         }
         const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1");
-        if (!response.ok) {
-            if (response.status === 429) {
-                throw new Error("Rate limit exceeded. Please wait.");
-            }
-            throw new Error("Something went wrong");
+        if (response.ok) {
+            const data = await response.json();
+            this.coinList = data.map((c) => new Coin(c.id, c.name, c.symbol));
+            this.listCache = {
+                coins: this.coinList,
+                savedAt: Date.now()
+            };
+            return this.coinList;
         }
-        const data = await response.json();
-        this.coinList = data.map((c) => new Coin(c.id, c.name, c.symbol));
-        this.listCache = {
-            coins: this.coinList,
-            savedAt: Date.now()
-        };
-        return this.coinList;
+        else {
+            alert("Too many requests, try again later.");
+            throw new Error("Could not fetch coins.");
+        }
     }
     async getCoinInfo(id) {
         const cached = this.infoCache.get(id);
@@ -47,6 +47,8 @@ class CoinManager {
             const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`);
             if (!response.ok) {
                 if (response.status === 429) {
+                    console.log(response.status);
+                    alert("Rate limit exceeded. Try again later.");
                     throw new Error("Rate limit exceeded. Please wait.");
                 }
                 throw new Error("Failed to fetch coin info");

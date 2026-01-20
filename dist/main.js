@@ -5,9 +5,15 @@ const coinList = new CoinList();
 let openedDetails = null;
 let viewMode = "all";
 async function loadCoins() {
-    const coins = await coinManager.getCoinList();
-    coinList.setCoins(coins);
-    renderCoinList();
+    try {
+        const coins = await coinManager.getCoinList();
+        coinList.setCoins(coins);
+        renderCoinList();
+    }
+    catch (err) {
+        alert("Too many requests try again later.");
+        console.error(err);
+    }
 }
 async function renderCoinList() {
     let coins = coinList.getFilteredCoins();
@@ -35,6 +41,9 @@ async function renderCoinList() {
         const symbol = document.createElement("div");
         symbol.className = "text-muted small mb-3";
         symbol.innerText = coin.symbol.toUpperCase();
+        const chartBtn = document.createElement("button");
+        chartBtn.className = "btn btn-outline-primary btn-sm mt-2";
+        chartBtn.innerText = "Chart";
         const btn = document.createElement("button");
         btn.className = "btn btn-outline-primary btn-sm mt-auto more-info-btn";
         btn.innerText = "More Info";
@@ -66,9 +75,6 @@ async function renderCoinList() {
                 renderCoinList();
             }
         };
-        const chartBtn = document.createElement("button");
-        chartBtn.className = "btn btn-outline-primary btn-sm mt-2";
-        chartBtn.innerText = "Chart";
         chartBtn.onclick = async () => {
             await openSingleCoinChart(coin.symbol.toUpperCase());
         };
@@ -76,8 +82,8 @@ async function renderCoinList() {
         titleRow.appendChild(star);
         body.appendChild(titleRow);
         body.appendChild(symbol);
-        body.appendChild(btn);
         body.appendChild(chartBtn);
+        body.appendChild(btn);
         card.appendChild(body);
         card.appendChild(details);
         col.appendChild(card);
@@ -123,9 +129,9 @@ async function renderCoinList() {
                 box.appendChild(row);
                 details.appendChild(box);
             }
-            catch (e) {
+            catch (err) {
                 details.innerHTML = "";
-                details.innerText = "Failed to load info";
+                details.innerText = "Too many requests try again later.";
             }
         };
     });
