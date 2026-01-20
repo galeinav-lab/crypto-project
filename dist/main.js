@@ -24,6 +24,14 @@ async function renderCoinList() {
     if (!container)
         return;
     container.innerHTML = "";
+    if (viewMode === "favorites" && coins.length === 0) {
+        container.innerHTML = `
+        <div class="alert fav-empty-alert text-center w-100 m-0" role="alert">
+            No favorites selected yet. Please add coins to your favorites ⭐
+        </div>
+    `;
+        return;
+    }
     coins.forEach(coin => {
         const col = document.createElement("div");
         col.className = "col-12 col-md-4";
